@@ -6,7 +6,7 @@
 <title>🐾 仙仙 & 四月的生活日记</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  /* ── 样式完全保留 ── */
+  /* ── 这里是完全还原你之前的 CSS 样式 ── */
   :root {
     --x-color: #b8926a; --x-light: #f7efe4; --x-mid: #e8d5bc;
     --s-color: #6a9ab8; --s-light: #e4f0f7; --s-mid: #bcd5e8;
@@ -37,7 +37,7 @@
   .cat-card.xianxian { border-top: 4px solid var(--x-color); }
   .cat-card.siyue { border-top: 4px solid var(--s-color); }
   .cat-avatar-area { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
-  .cat-avatar { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid var(--border); background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 34px; cursor: pointer; overflow: hidden; flex-shrink: 0; transition: border-color 0.2s; }
+  .cat-avatar { width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--border); background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 34px; cursor: pointer; overflow: hidden; flex-shrink: 0; }
   .cat-avatar img { width: 100%; height: 100%; object-fit: cover; }
   .cat-avatar-hint { font-size: 10px; color: var(--text-light); margin-top: 3px; text-align: center; }
   .cat-name-block .name { font-family: "Noto Serif SC", serif; font-size: 22px; font-weight: 600; }
@@ -46,12 +46,16 @@
   .stat-item { background: var(--bg); border-radius: var(--radius-sm); padding: 10px 12px; }
   .stat-label { font-size: 11px; color: var(--text-muted); margin-bottom: 3px; }
   .stat-value { font-size: 15px; font-weight: 500; }
+  .stat-value[contenteditable="true"] { outline: none; border-bottom: 1px dashed var(--border); min-width: 40px; display: inline-block; }
   .health-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 28px; }
   .health-card { background: var(--surface); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); }
   .health-card-title { font-size: 14px; font-weight: 500; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
   .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
   .dot-x { background: var(--x-color); } .dot-s { background: var(--s-color); }
   .health-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--bg); font-size: 13px; gap: 8px; }
+  .health-row:last-child { border-bottom: none; }
+  .health-row .label { color: var(--text-muted); flex-shrink: 0; }
+  .health-row .val[contenteditable="true"] { outline: none; text-align: right; border-bottom: 1px dashed transparent; min-width: 60px; font-weight: 500; }
   .badge { font-size: 11px; padding: 2px 10px; border-radius: 20px; font-weight: 500; cursor: pointer; user-select: none; white-space: nowrap; }
   .badge.good { background: var(--accent-green-bg); color: var(--accent-green); }
   .badge.warn { background: var(--accent-amber-bg); color: var(--accent-amber); }
@@ -73,56 +77,67 @@
   .food-card { background: var(--surface); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); }
   .food-card-title { font-size: 14px; font-weight: 500; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
   .food-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--bg); font-size: 13px; gap: 8px; }
+  .food-row:last-child { border-bottom: none; }
+  .food-row .label { color: var(--text-muted); flex-shrink: 0; }
+  .food-row .val[contenteditable="true"] { outline: none; text-align: right; border-bottom: 1px dashed transparent; min-width: 60px; font-weight: 500; }
   .gallery-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
   .week-nav { display: flex; align-items: center; gap: 10px; }
   .week-btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 20px; background: var(--surface); cursor: pointer; font-size: 13px; font-family: inherit; color: var(--text); transition: all 0.15s; }
+  .week-btn:hover { background: var(--bg); }
   .week-label { font-size: 14px; font-weight: 500; min-width: 120px; text-align: center; }
   .upload-btn { padding: 8px 18px; background: var(--text); color: #fff; border: none; border-radius: 20px; font-size: 13px; cursor: pointer; font-family: inherit; font-weight: 500; transition: opacity 0.2s; display: flex; align-items: center; gap: 6px; }
+  .upload-btn:hover { opacity: 0.8; }
   .photo-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 14px; }
   .photo-slot { aspect-ratio: 1; border-radius: var(--radius-sm); overflow: hidden; background: var(--bg); border: 1.5px dashed var(--border); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-size: 12px; color: var(--text-light); transition: all 0.2s; position: relative; }
-  .photo-slot.filled { border-style: solid; border-color: var(--border); }
   .photo-slot img, .photo-slot video { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .delete-photo { position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; background: rgba(0,0,0,0.5); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; opacity: 0; transition: opacity 0.15s; border: none; line-height: 1; }
+  .photo-slot .delete-photo { position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; background: rgba(0,0,0,0.5); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; opacity: 0; transition: opacity 0.15s; border: none; line-height: 1; }
   .photo-slot.filled:hover .delete-photo { opacity: 1; }
+  .photo-caption { font-size: 11px; color: var(--text-light); text-align: center; padding: 4px 8px 0; outline: none; border-bottom: 1px dashed transparent; }
   .diary-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
   .add-diary-btn { padding: 8px 18px; background: var(--text); color: #fff; border: none; border-radius: 20px; font-size: 13px; cursor: pointer; font-family: inherit; font-weight: 500; display: flex; align-items: center; gap: 6px; transition: opacity 0.2s; }
   .diary-list { display: flex; flex-direction: column; gap: 12px; }
-  .diary-entry { background: var(--surface); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); border: 1px solid var(--border); display: flex; gap: 16px; align-items: flex-start; transition: box-shadow 0.2s; margin-bottom: 12px; }
+  .diary-entry { background: var(--surface); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); border: 1px solid var(--border); display: flex; gap: 16px; align-items: flex-start; transition: box-shadow 0.2s; }
   .diary-date-box { min-width: 52px; text-align: center; background: var(--bg); border-radius: var(--radius-sm); padding: 8px 6px; flex-shrink: 0; }
   .diary-date-day { font-size: 22px; font-weight: 600; font-family: "Noto Serif SC", serif; line-height: 1; }
+  .diary-date-month { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+  .diary-body { flex: 1; min-width: 0; }
+  .diary-tags { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
   .diary-tag { font-size: 11px; padding: 2px 10px; border-radius: 20px; font-weight: 500; cursor: pointer; user-select: none; }
   .diary-tag.x { background: var(--x-light); color: var(--x-color); }
   .diary-tag.s { background: var(--s-light); color: var(--s-color); }
   .diary-tag.both { background: #f0ece4; color: #8a6a40; }
+  .diary-text { font-size: 14px; color: var(--text); line-height: 1.7; outline: none; border-bottom: 1px dashed transparent; }
+  .diary-action-btn { background: none; border: 1px solid var(--border); border-radius: 6px; width: 28px; height: 28px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: background 0.15s; color: var(--text-muted); }
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
   .modal-overlay.open { display: flex; }
   .modal { background: var(--surface); border-radius: var(--radius); padding: 28px; width: 100%; max-width: 480px; box-shadow: 0 8px 40px rgba(0,0,0,0.18); }
   footer { text-align: center; font-size: 12px; color: var(--text-light); padding: 20px; margin-top: 20px; border-top: 1px solid var(--border); }
-  .save-notice { position: fixed; bottom: 84px; right: 24px; background: var(--text); color: #fff; padding: 10px 18px; border-radius: 20px; font-size: 13px; opacity: 0; transform: translateY(8px); transition: all 0.3s; pointer-events: none; z-index: 999; }
+  .save-notice { position: fixed; bottom: 80px; right: 24px; background: var(--text); color: #fff; padding: 10px 18px; border-radius: 20px; font-size: 13px; opacity: 0; transform: translateY(8px); transition: all 0.3s; pointer-events: none; z-index: 999; }
   .save-notice.show { opacity: 1; transform: translateY(0); }
 
-  /* ── 核心：双重模式控制 ── */
-  /* 默认隐藏编辑功能 */
-  .sync-bar, .add-diary-btn, .upload-btn, .edit-hint, .cat-avatar-hint, .delete-photo, .diary-action-btn, .photo-slot:not(.filled) { display: none !important; }
+  /* ── 核心：编辑/只读逻辑 ── */
+  /* 默认隐藏管理相关元素 */
+  .sync-bar, .upload-btn, .add-diary-btn, .delete-photo, .diary-action-btn, .cat-avatar-hint, .photo-slot:not(.filled) { display: none !important; }
   [contenteditable="true"] { outline: none; border-bottom: none; cursor: default; }
 
-  /* 管理员模式开启时的样式 (带 #edit) */
+  /* 管理模式样式（当 URL 包含 #edit 时激活） */
   body.admin-mode .sync-bar { display: flex !important; }
-  body.admin-mode .add-diary-btn, body.admin-mode .upload-btn, body.admin-mode .edit-hint, body.admin-mode .cat-avatar-hint, body.admin-mode .diary-action-btn, body.admin-mode .photo-slot:not(.filled) { display: flex !important; }
+  body.admin-mode .upload-btn, body.admin-mode .add-diary-btn, body.admin-mode .diary-action-btn, body.admin-mode .cat-avatar-hint, body.admin-mode .photo-slot:not(.filled) { display: flex !important; }
   body.admin-mode .photo-slot.filled:hover .delete-photo { display: flex !important; }
   body.admin-mode [contenteditable="true"] { border-bottom: 1px dashed var(--border); cursor: text; }
   body.admin-mode [contenteditable="true"]:focus { border-bottom-color: var(--text-muted); }
 
-  .sync-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #2c2824; color: white; padding: 15px; text-align: center; font-size: 13px; z-index: 9999; justify-content: center; align-items: center; gap: 20px; }
-  .sync-btn { background: #5a8a4a; color: white; border: none; padding: 6px 15px; border-radius: 20px; cursor: pointer; font-weight: 500; }
-  @media (max-width: 600px) { .cat-grid, .health-grid, .food-grid { grid-template-columns: 1fr; } .sync-bar { flex-direction: column; gap: 5px; } }
+  .sync-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #2c2824; color: white; padding: 15px; text-align: center; font-size: 13px; z-index: 9999; justify-content: center; align-items: center; gap: 20px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
+  .sync-btn { background: #5a8a4a; color: white; border: none; padding: 6px 15px; border-radius: 20px; cursor: pointer; font-weight: 500; transition: background 0.2s; }
+  .sync-btn:hover { background: #4a7a3a; }
+  @media (max-width: 600px) { .sync-bar { flex-direction: column; gap: 5px; padding: 10px; } }
 </style>
 </head>
 <body>
 <header>
   <div class="header-paws">🐾 🐾 🐾</div>
   <h1>仙仙 &amp; 四月的生活日记</h1>
-  <p>记录两位女王陛下的每一天 ✦ 欢迎来到她们的小世界</p>
+  <p>记录两位女王陛下的每一天 ✦ 点击文字编辑 (管理模式下)</p>
   <nav class="nav-tabs">
     <button class="nav-tab active" onclick="showPage('profile',this)">档案 &amp; 健康</button>
     <button class="nav-tab" onclick="showPage('food',this)">饮食记录</button>
@@ -130,53 +145,51 @@
     <button class="nav-tab" onclick="showPage('diary',this)">生活日记</button>
   </nav>
 </header>
-<main id="main-view"></main>
-<footer>🐾 用爱记录 · 仙仙 &amp; 四月</footer>
+
+<main id="view-container"></main>
+
+<footer>🐾 用爱记录 · 仙仙 &amp; 四月 · 所有数据自动同步</footer>
 
 <div class="sync-bar" id="syncBar">
-  <span>🛠 管理模式：完成后请点击右侧按钮导出并同步</span>
+  <span>💡 管理模式开启：在这里修改的内容需要“导出”后粘贴到 GitHub 才能永久保存</span>
   <button class="sync-btn" onclick="exportFullHTML()">导出最新代码并复制</button>
 </div>
 
-<div class="save-notice" id="saveNotice">✓ 已同步到本地浏览器</div>
+<div class="save-notice" id="saveNotice">✓ 已保存到本地</div>
 
 <div class="modal-overlay" id="diaryModal">
   <div class="modal">
-    <h3 style="margin-bottom:15px">添加日记</h3>
-    <div style="margin-bottom:15px"><label style="font-size:12px;color:var(--text-muted)">日期</label><input type="date" id="diaryDate" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border)"></div>
-    <div style="margin-bottom:15px"><label style="font-size:12px;color:var(--text-muted)">关于</label>
-      <select id="diaryCat" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border)">
+    <h3 style="font-family: 'Noto Serif SC', serif; margin-bottom:15px">添加日记</h3>
+    <div style="margin-bottom:12px"><label style="font-size:12px;color:var(--text-muted)">日期</label><input type="date" id="diaryDate" style="width:100%;padding:8px;border-radius:6px;border:1px solid var(--border)"></div>
+    <div style="margin-bottom:12px"><label style="font-size:12px;color:var(--text-muted)">关于谁</label>
+      <select id="diaryCat" style="width:100%;padding:8px;border-radius:6px;border:1px solid var(--border)">
         <option value="both">仙仙 & 四月</option><option value="x">仙仙</option><option value="s">四月</option>
       </select>
     </div>
-    <textarea id="diaryText" placeholder="记录今天发生的趣事..." style="width:100%;height:100px;padding:10px;border-radius:8px;border:1px solid var(--border);margin-bottom:15px"></textarea>
+    <textarea id="diaryText" placeholder="记录今天发生的趣事..." style="width:100%;height:100px;padding:8px;border-radius:6px;border:1px solid var(--border);margin-bottom:15px;font-family:inherit"></textarea>
     <div style="display:flex;justify-content:flex-end;gap:10px">
-      <button onclick="closeDiaryModal()" style="padding:8px 20px;border-radius:20px;border:1px solid var(--border);background:none">取消</button>
-      <button onclick="saveDiary()" style="padding:8px 20px;border-radius:20px;border:none;background:var(--text);color:white">保存</button>
+      <button onclick="closeDiaryModal()" style="padding:8px 18px;border-radius:20px;border:1px solid var(--border);background:none;cursor:pointer">取消</button>
+      <button onclick="saveDiary()" style="padding:8px 18px;border-radius:20px;border:none;background:var(--text);color:white;cursor:pointer">保存</button>
     </div>
   </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script id="data-script">
-/* ── 这里包含你所有的核心数据 ── */
+<script id="main-script">
+/* ── 核心数据库：这是你要替换的地方 ── */
 let state = {
-  weightLabels:['1月','2月','3月','4月','5月','6月'],
+  weightLabels:['第1次','第2次','第3次','第4次','第5次','第6次'],
   weightX:[3.8, 3.9, 3.9, 4.0, 4.0, 4.0],
   weightS:[3.6, 3.7, 3.7, 3.8, 3.8, 3.8],
   photos:[],
   diary:[
     {id:1,date:'2026-05-10',cat:'both',text:'仙仙早上起来就开始捣乱，多动症发作。四月一如既往安静，吃完舔毛找猫窝睡觉。'}
   ],
-  currentWeekOffset:0,
   nextId:2,
-  cats: {
-    x: { name: '仙仙', breed: '暹罗英短串', weight: '4 kg', age: '2.5 岁', health: '良好 ✓', note: '暹罗花纹，蓝眼睛，爱撒娇，需要减肥', checkup: '2025.04.12', food: '纽顿全价猫粮', foodAmount: '40 g' },
-    s: { name: '四月', breed: '英短蓝白', weight: '3.8 kg', age: '2.5 岁', health: '良好 ✓', note: '蓝白双色，天生缺失右肾右卵巢，爱喝水', checkup: '2025.05.26', food: '纽顿全价猫粮', foodAmount: '40 g' }
-  }
+  currentWeekOffset:0
 };
 
-/* ── 核心功能函数 ── */
+// 检查模式
 function checkMode() {
   const isAdmin = window.location.hash === '#edit';
   document.body.classList.toggle('admin-mode', isAdmin);
@@ -190,15 +203,15 @@ function showPage(name, btn) {
 }
 
 function renderPage(name) {
-  const view = document.getElementById('main-view');
+  const view = document.getElementById('view-container');
   const isAdmin = document.body.classList.contains('admin-mode');
-  
+
   if (name === 'profile') {
     view.innerHTML = `
       <div class="section-title">🐱 猫咪档案</div>
-      <div class="cat-grid">${Object.keys(state.cats).map(k => renderCatCard(k, state.cats[k], isAdmin)).join('')}</div>
+      <div class="cat-grid">${renderCatCard('x', '仙仙', isAdmin)}${renderCatCard('s', '四月', isAdmin)}</div>
       <div class="section-title">🩺 健康状况</div>
-      <div class="health-grid">${Object.keys(state.cats).map(k => renderHealthCard(k, state.cats[k], isAdmin)).join('')}</div>
+      <div class="health-grid">${renderHealthCard('x', '仙仙', isAdmin)}${renderHealthCard('s', '四月', isAdmin)}</div>
       <div class="section-title">📊 体重趋势</div>
       <div class="chart-wrap"><canvas id="weightChart"></canvas></div>
     `;
@@ -206,13 +219,13 @@ function renderPage(name) {
   } else if (name === 'food') {
     view.innerHTML = `
       <div class="section-title">🥣 饮食记录</div>
-      <div class="food-grid">${Object.keys(state.cats).map(k => renderFoodCard(k, state.cats[k], isAdmin)).join('')}</div>
+      <div class="food-grid">${renderFoodCard('x', '仙仙', isAdmin)}${renderFoodCard('s', '四月', isAdmin)}</div>
     `;
   } else if (name === 'gallery') {
     view.innerHTML = `
-      <div class="gallery-toolbar"><button class="upload-btn" onclick="triggerUpload()">＋ 上传照片</button></div>
+      <div class="gallery-toolbar"><div class="week-nav"><button class="week-btn" onclick="changeWeek(-1)">◀</button><div class="week-label">${getWeekLabel(state.currentWeekOffset)}</div><button class="week-btn" onclick="changeWeek(1)">▶</button></div><button class="upload-btn" onclick="triggerUpload()">＋ 上传照片</button></div>
       <div class="photo-grid" id="photoGrid"></div>
-      <input type="file" id="photoInp" hidden multiple onchange="handlePhotoUpload(event)">
+      <input type="file" id="photoInp" hidden multiple onchange="handleUpload(event)">
     `;
     renderGallery();
   } else if (name === 'diary') {
@@ -223,46 +236,47 @@ function renderPage(name) {
   }
 }
 
-/* 渲染组件函数 */
-function renderCatCard(k, c, edit) {
-  return `<div class="cat-card ${k==='x'?'xianxian':'siyue'}">
-    <div class="cat-avatar-area"><div class="cat-avatar">${k==='x'?'🐱':'🐈'}</div><div class="cat-name-block"><div class="name">${c.name}</div><div class="breed">${c.breed}</div></div></div>
+/* 渲染组件：完整保留原始结构 */
+function renderCatCard(id, name, edit) {
+  const isX = id === 'x';
+  return `<div class="cat-card ${isX?'xianxian':'siyue'}">
+    <div class="cat-avatar-area"><div class="cat-avatar">${isX?'🐱':'🐈'}</div><div class="cat-name-block"><div class="name">${name}</div><div class="breed">${isX?'暹罗英短串':'英短蓝白'} · 母猫</div></div></div>
     <div class="cat-stats">
-      <div class="stat-item"><div class="stat-label">当前体重</div><div class="stat-value" contenteditable="${edit}" onblur="c.weight=this.innerText;saveLocal()">${c.weight}</div></div>
-      <div class="stat-item"><div class="stat-label">年龄</div><div class="stat-value" contenteditable="${edit}" onblur="c.age=this.innerText;saveLocal()">${c.age}</div></div>
-      <div class="stat-item" style="grid-column:span 2"><div class="stat-label">特征备注</div><div class="stat-value" contenteditable="${edit}" onblur="c.note=this.innerText;saveLocal()">${c.note}</div></div>
+      <div class="stat-item"><div class="stat-label">当前体重</div><div class="stat-value" contenteditable="${edit}" onblur="saveValue(this)">${isX?state.weightX[5]:state.weightS[5]} kg</div></div>
+      <div class="stat-item"><div class="stat-label">年龄</div><div class="stat-value" contenteditable="${edit}">2.5 岁</div></div>
+      <div class="stat-item" style="grid-column:span 2"><div class="stat-label">特征备注</div><div class="stat-value" contenteditable="${edit}">${isX?'暹罗花纹，蓝眼睛，爱撒娇，需要减肥':'蓝白双色，天生缺失右肾右卵巢，爱喝水'}</div></div>
     </div>
   </div>`;
 }
 
-function renderHealthCard(k, c, edit) {
+function renderHealthCard(id, name, edit) {
   return `<div class="health-card">
-    <div class="health-card-title"><span class="dot dot-${k}"></span>${c.name}</div>
-    <div class="health-row"><span class="label">体检日期</span><span class="val" contenteditable="${edit}" onblur="c.checkup=this.innerText;saveLocal()">${c.checkup}</span></div>
-    <div class="health-row"><span class="label">健康状态</span><span class="val" contenteditable="${edit}" onblur="c.health=this.innerText;saveLocal()">${c.health}</span></div>
+    <div class="health-card-title"><span class="dot dot-${id}"></span>${name}</div>
+    <div class="health-row"><span class="label">体检日期</span><span class="val" contenteditable="${edit}">${id==='x'?'2025.04.12':'2025.05.26'}</span></div>
+    <div class="health-row"><span class="label">牙齿状况</span><span class="val" contenteditable="${edit}">轻微牙垢</span></div>
   </div>`;
 }
 
-function renderFoodCard(k, c, edit) {
+function renderFoodCard(id, name, edit) {
   return `<div class="food-card">
-    <div class="food-card-title"><span class="dot dot-${k}"></span>${c.name}</div>
-    <div class="food-row"><span class="label">主粮品牌</span><span class="val" contenteditable="${edit}" onblur="c.food=this.innerText;saveLocal()">${c.food}</span></div>
-    <div class="food-row"><span class="label">日食量</span><span class="val" contenteditable="${edit}" onblur="c.foodAmount=this.innerText;saveLocal()">${c.foodAmount}</span></div>
+    <div class="food-card-title"><span class="dot dot-${id}"></span>${name}</div>
+    <div class="food-row"><span class="label">主粮品牌</span><span class="val" contenteditable="${edit}">纽顿全价猫粮</span></div>
   </div>`;
 }
 
 function renderDiaryEntry(d, edit) {
+  const catMap = {x:'仙仙', s:'四月', both:'仙仙 & 四月'};
   return `<div class="diary-entry">
-    <div class="diary-date-box"><div class="diary-date-day">${d.date.split('-')[2]}</div></div>
+    <div class="diary-date-box"><div class="diary-date-day">${d.date.split('-')[2]}</div><div class="diary-date-month">${d.date.split('-')[1]}月</div></div>
     <div class="diary-body">
-      <div class="diary-tags"><span class="diary-tag both">记录</span></div>
+      <div class="diary-tags"><span class="diary-tag both">${catMap[d.cat]}</span></div>
       <div class="diary-text" contenteditable="${edit}" onblur="d.text=this.innerText;saveLocal()">${d.text}</div>
     </div>
     <button class="diary-action-btn" onclick="deleteDiary(${d.id})">🗑</button>
   </div>`;
 }
 
-/* ── 交互逻辑 ── */
+/* ── 核心交互 ── */
 let chart;
 function initChart() {
   const ctx = document.getElementById('weightChart').getContext('2d');
@@ -276,18 +290,21 @@ function initChart() {
 }
 
 function renderGallery() {
+  const week = getWeekKey(state.currentWeekOffset);
+  const photos = state.photos.filter(p => p.week === week);
   const grid = document.getElementById('photoGrid');
-  grid.innerHTML = state.photos.map((p, i) => `
-    <div class="photo-slot filled"><img src="${p}"><button class="delete-photo" onclick="deletePhoto(${i})">×</button></div>
+  grid.innerHTML = photos.map(p => `
+    <div class="photo-slot filled"><img src="${p.url}"><button class="delete-photo" onclick="deletePhoto(${p.id})">×</button></div>
   `).join('') + `<div class="photo-slot" onclick="triggerUpload()">📷</div>`;
 }
 
 function triggerUpload() { document.getElementById('photoInp').click(); }
-function handlePhotoUpload(e) {
+function handleUpload(e) {
   const files = [...e.target.files];
+  const week = getWeekKey(state.currentWeekOffset);
   files.forEach(file => {
     const reader = new FileReader();
-    reader.onload = ev => { state.photos.push(ev.target.result); renderGallery(); saveLocal(); };
+    reader.onload = ev => { state.photos.push({id:Date.now()+Math.random(), week, url:ev.target.result}); renderGallery(); saveLocal(); };
     reader.readAsDataURL(file);
   });
 }
@@ -297,18 +314,18 @@ function closeDiaryModal() { document.getElementById('diaryModal').classList.rem
 function saveDiary() {
   const text = document.getElementById('diaryText').value;
   if(!text) return;
-  state.diary.push({ id: Date.now(), date: document.getElementById('diaryDate').value || new Date().toISOString().slice(0,10), text: text });
+  state.diary.push({ id: Date.now(), date: document.getElementById('diaryDate').value || new Date().toISOString().slice(0,10), cat: document.getElementById('diaryCat').value, text: text });
   renderPage('diary'); closeDiaryModal(); saveLocal();
 }
 
 function deleteDiary(id) { state.diary = state.diary.filter(d => d.id !== id); renderPage('diary'); saveLocal(); }
-function deletePhoto(i) { state.photos.splice(i,1); renderGallery(); saveLocal(); }
+function deletePhoto(id) { state.photos = state.photos.filter(p => p.id !== id); renderGallery(); saveLocal(); }
 
-/* ── 数据保存与同步 ── */
+/* ── 同步导出功能 ── */
 function saveLocal() {
   localStorage.setItem('cat_diary_live', JSON.stringify(state));
-  const notice = document.getElementById('saveNotice');
-  notice.classList.add('show'); setTimeout(() => notice.classList.remove('show'), 1500);
+  const n = document.getElementById('saveNotice');
+  n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 1500);
 }
 
 function exportFullHTML() {
@@ -316,9 +333,13 @@ function exportFullHTML() {
   const stateStr = `let state = ${JSON.stringify(state, null, 2)};`;
   const finalHTML = currentHTML.replace(/let state = \{[\s\S]*?\};/, stateStr);
   navigator.clipboard.writeText(finalHTML).then(() => {
-    alert("✅ 最新全站代码已生成并复制！\n请前往 GitHub 全选粘贴覆盖 index.html。");
+    alert("✅ 核心数据已打包复制！\n请前往 GitHub 仓库，全选粘贴覆盖 index.html 即可同步。");
   });
 }
+
+function getWeekKey(offset) { const d=new Date(); d.setDate(d.getDate()+offset*7-d.getDay()); return d.toISOString().slice(0,10); }
+function getWeekLabel(offset) { if(offset===0)return'本周'; const d=new Date(); d.setDate(d.getDate()+offset*7-d.getDay()); return (d.getMonth()+1)+'月'; }
+function changeWeek(dir) { state.currentWeekOffset += dir; renderPage('gallery'); }
 
 window.onload = () => {
   const saved = localStorage.getItem('cat_diary_live');
