@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐾 仙仙 & 四月的生活日记</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --x-color: #b8926a; --x-light: #f7efe4; --x-mid: #e8d5bc;
+    --s-color: #6a9ab8; --s-light: #e4f0f7; --s-mid: #bcd5e8;
+    --bg: #faf8f5; --surface: #ffffff; --border: #e8e4de;
+    --text: #2c2824; --text-muted: #8a8078; --text-light: #b5aea6;
+    --accent-green: #5a8a4a; --accent-green-bg: #eaf3e4;
+    --accent-amber: #9a6a20; --accent-amber-bg: #faefd8;
+    --radius: 14px; --radius-sm: 8px;
+    --shadow: 0 2px 16px rgba(0,0,0,0.06);
+    --shadow-hover: 0 4px 24px rgba(0,0,0,0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Noto Sans SC", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6; }
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 28px 0 20px; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 12px rgba(0,0,0,0.04); }
+  .header-paws { font-size: 22px; letter-spacing: 6px; margin-bottom: 4px; }
+  header h1 { font-family: "Noto Serif SC", serif; font-size: 28px; font-weight: 700; letter-spacing: 0.04em; margin-bottom: 4px; }
+  header p { font-size: 13px; color: var(--text-muted); font-weight: 300; }
+  .nav-tabs { display: flex; justify-content: center; gap: 6px; margin-top: 16px; flex-wrap: wrap; padding: 0 10px; }
+  .nav-tab { padding: 6px 18px; border-radius: 20px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--text-muted); font-family: inherit; transition: all 0.2s; }
+  .nav-tab:hover { background: var(--bg); }
+  .nav-tab.active { background: var(--text); color: #fff; border-color: var(--text); }
+  main { max-width: 860px; margin: 0 auto; padding: 32px 16px 60px; }
+  .page { display: none; } .page.active { display: block; }
+  .section-title { font-family: "Noto Serif SC", serif; font-size: 18px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 28px; }
+  .cat-card { background: var(--surface); border-radius: var(--radius); padding: 24px 20px 20px; box-shadow: var(--shadow); border: 1px solid var(--border); transition: box-shadow 0.2s; }
+  .cat-card:hover { box-shadow: var(--shadow-hover); }
+  .cat-card.xianxian { border-top: 4px solid var(--x-color); }
+  .cat-card.siyue { border-top: 4px solid var(--s-color); }
+  .cat-avatar-area { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .cat-avatar { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid var(--border); background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 34px; cursor: pointer; overflow: hidden; flex-shrink: 0; transition: border-color 0.2s; }
+  .cat-avatar:hover { border-color: var(--text-muted); }
+  .cat-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .cat-avatar-hint { font-size: 10px; color: var(--text-light); margin-top: 3px; text-align: center; }
+  .cat-name-block .name { font-family: "Noto Serif SC", serif; font-size: 22px; font-weight: 600; }
+  .cat-name-block .breed { font-size: 12px; color: var(--text-muted); margin-top: 2px; font-weight: 300; }
+  .cat-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+  .stat-item { background: var(--bg); border-radius: var(--radius-sm); padding: 10px 12px; }
+  .stat-label { font-size: 11px; color: var(--text-muted); margin-bottom: 3px; }
+  .stat-value { font-size: 15px; font-weight: 500; }
+  .stat-value[contenteditable="true"] { outline: none; border-bottom: 1px dashed var(--border); min-width: 40px; display: inline-block; cursor: text; }
+  .stat-value[contenteditable="true"]:focus { border-bottom-color: var(--text-muted); }
+  .edit-hint { font-size: 11px; color: var(--text-light); text-align: center; padding-top: 8px; border-top: 1px solid var(--border); }
+  .health-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 28px; }
+  .health-card { background: var(--surface); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+  .health-card-title { font-size: 14px; font-weight: 500; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+  .dot-x { background: var(--x-color); } .dot-s { background: var(--s-color); }
+  .health-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--bg); font-size: 13px; gap: 8px; }
+  .health-row:last-child { border-bottom: none; }
+  .health-row .label { color: var(--text-muted); flex-shrink: 0; }
+  .health-row .val[contenteditable="true"] { outline: none; text-align: right; border-bottom: 1px dashed transparent; cursor: text; min-width: 60px; font-weight: 500; }
+  .health-row .val[contenteditable="true"]:hover { border-bottom-color: var(--border); }
+  .health-row .val[contenteditable="true"]:focus { border-bottom-color: var(--text-muted); }
+  .badge { font-size: 11px; padding: 2px 10px; border-radius: 20px; font-weight: 500; cursor: pointer; user-select: none; white-space: nowrap; }
+  .badge.good { background: var(--accent-green-bg); color: var(--accent-green); }
+  .badge.warn { background: var(--accent-amber-bg); color: var(--accent-amber); }
+  .chart-wrap { background: var(--surface); border-radius: var(--radius); padding: 22px 24px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 28px; }
+  .chart-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .chart-legend { display: flex; gap: 16px; font-size: 12px; color: var(--text-muted); }
+  .leg { display: flex; align-items: center; gap: 6px; }
+  .leg-dot { width: 10px; height: 10px; border-radius: 50%; }
+  canvas#weightChart { width: 100% !important; height: 180px !important; }
+  .weight-inputs { display: grid; grid-template-columns: repeat(6,1fr); gap: 6px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .wi-group { text-align: center; }
+  .wi-label { font-size: 10px; color: var(--text-muted); margin-bottom: 4px; }
+  .wi-pair { display: flex; flex-direction: column; gap: 3px; }
+  .wi-input { width: 100%; padding: 4px 6px; font-size: 12px; border: 1px solid var(--border); border-radius: 6px; text-align: center; font-family: inherit; color: var(--text); background: var(--bg); }
+  .wi-input:focus { outline: none; border-color: var(--text-muted); }
+  .wi-x { border-left: 2px solid var(--x-color); } .wi-s { border-left: 2px solid var(--s-color); }
+  .wi-mini-label { font-size: 9px; color: var(--text-light); }
+  .food-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 28px; }
+  .food-card { background: var(--surface); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+  .food-card-title { font-size: 14px; font-weight: 500; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .food-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--bg); font-size: 13px; gap: 8px; }
+  .food-row:last-child { border-bottom: none; }
+  .food-row .label { color: var(--text-muted); flex-shrink: 0; }
+  .food-row .val[contenteditable="true"] { outline: none; text-align: right; border-bottom: 1px dashed transparent; cursor: text; min-width: 60px; font-weight: 500; }
+  .food-row .val[contenteditable="true"]:hover { border-bottom-color: var(--border); }
+  .food-row .val[contenteditable="true"]:focus { border-bottom-color: var(--text-muted); }
+  .gallery-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+  .week-nav { display: flex; align-items: center; gap: 10px; }
+  .week-btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 20px; background: var(--surface); cursor: pointer; font-size: 13px; font-family: inherit; color: var(--text); transition: all 0.15s; }
+  .week-btn:hover { background: var(--bg); }
+  .week-label { font-size: 14px; font-weight: 500; min-width: 120px; text-align: center; }
+  .upload-btn { padding: 8px 18px; background: var(--text); color: #fff; border: none; border-radius: 20px; font-size: 13px; cursor: pointer; font-family: inherit; font-weight: 500; transition: opacity 0.2s; display: flex; align-items: center; gap: 6px; }
+  .upload-btn:hover { opacity: 0.8; }
+  .photo-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 14px; }
+  .photo-slot { aspect-ratio: 1; border-radius: var(--radius-sm); overflow: hidden; background: var(--bg); border: 1.5px dashed var(--border); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-size: 12px; color: var(--text-light); transition: all 0.2s; position: relative; }
+  .photo-slot:hover { border-color: var(--text-muted); background: var(--surface); }
+  .photo-slot.filled { border-style: solid; border-color: var(--border); }
+  .photo-slot img, .photo-slot video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .photo-slot .delete-photo { position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; background: rgba(0,0,0,0.5); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; opacity: 0; transition: opacity 0.15s; border: none; line-height: 1; }
+  .photo-slot.filled:hover .delete-photo { opacity: 1; }
+  .photo-caption { font-size: 11px; color: var(--text-light); text-align: center; padding: 4px 8px 0; outline: none; border-bottom: 1px dashed transparent; cursor: text; }
+  .photo-caption:hover { border-bottom-color: var(--border); }
+  .photo-caption:focus { border-bottom-color: var(--text-muted); color: var(--text); }
+  .diary-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+  .add-diary-btn { padding: 8px 18px; background: var(--text); color: #fff; border: none; border-radius: 20px; font-size: 13px; cursor: pointer; font-family: inherit; font-weight: 500; display: flex; align-items: center; gap: 6px; transition: opacity 0.2s; }
+  .add-diary-btn:hover { opacity: 0.8; }
+  .diary-list { display: flex; flex-direction: column; gap: 12px; }
+  .diary-entry { background: var(--surface); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); border: 1px solid var(--border); display: flex; gap: 16px; align-items: flex-start; transition: box-shadow 0.2s; }
+  .diary-entry:hover { box-shadow: var(--shadow-hover); }
+  .diary-date-box { min-width: 52px; text-align: center; background: var(--bg); border-radius: var(--radius-sm); padding: 8px 6px; flex-shrink: 0; }
+  .diary-date-day { font-size: 22px; font-weight: 600; font-family: "Noto Serif SC", serif; line-height: 1; }
+  .diary-date-month { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+  .diary-body { flex: 1; min-width: 0; }
+  .diary-tags { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+  .diary-tag { font-size: 11px; padding: 2px 10px; border-radius: 20px; font-weight: 500; cursor: pointer; user-select: none; }
+  .diary-tag.x { background: var(--x-light); color: var(--x-color); }
+  .diary-tag.s { background: var(--s-light); color: var(--s-color); }
+  .diary-tag.both { background: #f0ece4; color: #8a6a40; }
+  .diary-text { font-size: 14px; color: var(--text); line-height: 1.7; outline: none; border-bottom: 1px dashed transparent; cursor: text; }
+  .diary-text:hover { border-bottom-color: var(--border); }
+  .diary-text:focus { border-bottom-color: var(--text-muted); }
+  .diary-action-btn { background: none; border: 1px solid var(--border); border-radius: 6px; width: 28px; height: 28px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: background 0.15s; color: var(--text-muted); }
+  .diary-action-btn:hover { background: var(--bg); }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--surface); border-radius: var(--radius); padding: 28px; width: 100%; max-width: 480px; box-shadow: 0 8px 40px rgba(0,0,0,0.18); }
+  .modal h3 { font-family: "Noto Serif SC", serif; font-size: 18px; margin-bottom: 20px; }
+  .modal-field { margin-bottom: 16px; }
+  .modal-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; display: block; }
+  .modal-input, .modal-select, .modal-textarea { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: inherit; color: var(--text); background: var(--bg); outline: none; transition: border-color 0.15s; }
+  .modal-input:focus, .modal-select:focus, .modal-textarea:focus { border-color: var(--text-muted); }
+  .modal-textarea { resize: vertical; min-height: 90px; }
+  .modal-btns { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+  .modal-cancel { padding: 9px 20px; border: 1px solid var(--border); border-radius: 20px; background: transparent; font-size: 13px; cursor: pointer; font-family: inherit; color: var(--text-muted); }
+  .modal-cancel:hover { background: var(--bg); }
+  .modal-confirm { padding: 9px 20px; background: var(--text); color: #fff; border: none; border-radius: 20px; font-size: 13px; cursor: pointer; font-family: inherit; font-weight: 500; }
+  .modal-confirm:hover { opacity: 0.8; }
+  footer { text-align: center; font-size: 12px; color: var(--text-light); padding: 20px; margin-top: 20px; border-top: 1px solid var(--border); }
+  .save-notice { position: fixed; bottom: 24px; right: 24px; background: var(--text); color: #fff; padding: 10px 18px; border-radius: 20px; font-size: 13px; opacity: 0; transform: translateY(8px); transition: all 0.3s; pointer-events: none; z-index: 999; }
+  .save-notice.show { opacity: 1; transform: translateY(0); }
+  @media (max-width: 600px) {
+    .cat-grid, .health-grid, .food-grid { grid-template-columns: 1fr; }
+    .photo-grid { grid-template-columns: repeat(2,1fr); }
+    .weight-inputs { grid-template-columns: repeat(3,1fr); }
+    header h1 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-paws">🐾 🐾 🐾</div>
+  <h1>仙仙 &amp; 四月的生活日记</h1>
+  <p>记录两位女王陛下的每一天 ✦ 点击任意文字可直接编辑</p>
+  <nav class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('profile',this)">档案 &amp; 健康</button>
+    <button class="nav-tab" onclick="showPage('food',this)">饮食记录</button>
+    <button class="nav-tab" onclick="showPage('gallery',this)">相册</button>
+    <button class="nav-tab" onclick="showPage('diary',this)">生活日记</button>
+  </nav>
+</header>
+<main>
+  <!-- PAGE 1 -->
+  <div class="page active" id="page-profile">
+    <div class="section-title"><span>🐱</span> 猫咪档案</div>
+    <div class="cat-grid">
+      <div class="cat-card xianxian">
+        <div class="cat-avatar-area">
+          <div>
+            <div class="cat-avatar" id="avatar-x" onclick="triggerAvatarUpload('x')" title="点击更换头像"><img src="data:image/jpeg;base64,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" alt="仙仙"></div>
+            <div class="cat-avatar-hint">点击换头像</div>
+            <input type="file" id="upload-avatar-x" accept="image/*" style="display:none" onchange="handleAvatarUpload(event,'x')">
+          </div>
+          <div class="cat-name-block"><div class="name">仙仙</div><div class="breed">暹罗英短串 · 母猫</div></div>
+        </div>
+        <div class="cat-stats">
+          <div class="stat-item"><div class="stat-label">当前体重</div><div class="stat-value" contenteditable="true">4 kg</div></div>
+          <div class="stat-item"><div class="stat-label">年龄</div><div class="stat-value" contenteditable="true">2.5 岁</div></div>
+          <div class="stat-item"><div class="stat-label">绝育</div><div class="stat-value" contenteditable="true">已绝育</div></div>
+          <div class="stat-item"><div class="stat-label">健康状态</div><div class="stat-value" contenteditable="true" style="color:var(--accent-green)">良好 ✓</div></div>
+          <div class="stat-item" style="grid-column:span 2"><div class="stat-label">特征备注</div><div class="stat-value" contenteditable="true" style="font-size:13px">暹罗花纹，蓝眼睛，爱撒娇，需要减肥</div></div>
+        </div>
+        <div class="edit-hint">✏️ 点击数值可直接修改</div>
+      </div>
+      <div class="cat-card siyue">
+        <div class="cat-avatar-area">
+          <div>
+            <div class="cat-avatar" id="avatar-s" onclick="triggerAvatarUpload('s')" title="点击更换头像"><img src="data:image/jpeg;base64,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" alt="四月"></div>
+            <div class="cat-avatar-hint">点击换头像</div>
+            <input type="file" id="upload-avatar-s" accept="image/*" style="display:none" onchange="handleAvatarUpload(event,'s')">
+          </div>
+          <div class="cat-name-block"><div class="name">四月</div><div class="breed">英短蓝白 · 母猫</div></div>
+        </div>
+        <div class="cat-stats">
+          <div class="stat-item"><div class="stat-label">当前体重</div><div class="stat-value" contenteditable="true">3.8 kg</div></div>
+          <div class="stat-item"><div class="stat-label">年龄</div><div class="stat-value" contenteditable="true">2.5 岁</div></div>
+          <div class="stat-item"><div class="stat-label">绝育</div><div class="stat-value" contenteditable="true">已绝育</div></div>
+          <div class="stat-item"><div class="stat-label">健康状态</div><div class="stat-value" contenteditable="true" style="color:var(--accent-green)">良好 ✓</div></div>
+          <div class="stat-item" style="grid-column:span 2"><div class="stat-label">特征备注</div><div class="stat-value" contenteditable="true" style="font-size:13px">蓝白双色，天生缺失右肾右卵巢，爱喝水</div></div>
+        </div>
+        <div class="edit-hint">✏️ 点击数值可直接修改</div>
+      </div>
+    </div>
+    <div class="section-title"><span>🩺</span> 健康状况</div>
+    <div class="health-grid">
+      <div class="health-card">
+        <div class="health-card-title"><span class="dot dot-x"></span>仙仙</div>
+        <div class="health-row"><span class="label">体检 / 绝育</span><span class="val" contenteditable="true">2025.04.12</span></div>
+        <div class="health-row"><span class="label">疫苗</span><span class="badge good" onclick="toggleBadge(this)">已接种</span></div>
+        <div class="health-row"><span class="label">驱虫</span><span class="badge good" onclick="toggleBadge(this)">已更新</span></div>
+        <div class="health-row"><span class="label">牙齿</span><span class="val" contenteditable="true">轻微牙垢</span></div>
+        <div class="health-row"><span class="label">毛发</span><span class="val" contenteditable="true">柔顺有光泽</span></div>
+        <div class="health-row"><span class="label">饮水</span><span class="val" contenteditable="true">不爱喝水，需鼓励</span></div>
+        <div class="health-row"><span class="label">其他</span><span class="val" contenteditable="true">需要减肥</span></div>
+      </div>
+      <div class="health-card">
+        <div class="health-card-title"><span class="dot dot-s"></span>四月</div>
+        <div class="health-row"><span class="label">体检 / 绝育</span><span class="val" contenteditable="true">2025.05.26</span></div>
+        <div class="health-row"><span class="label">疫苗</span><span class="badge good" onclick="toggleBadge(this)">已接种</span></div>
+        <div class="health-row"><span class="label">驱虫</span><span class="badge good" onclick="toggleBadge(this)">已更新</span></div>
+        <div class="health-row"><span class="label">牙齿</span><span class="val" contenteditable="true">轻微牙垢</span></div>
+        <div class="health-row"><span class="label">毛发</span><span class="val" contenteditable="true">浓密蓬松</span></div>
+        <div class="health-row"><span class="label">饮水</span><span class="val" contenteditable="true">爱喝水，饮水充足</span></div>
+        <div class="health-row"><span class="label">其他</span><span class="val" contenteditable="true">天生缺失右肾右卵巢，需定期复查</span></div>
+      </div>
+    </div>
+    <div class="section-title"><span>📊</span> 体重趋势</div>
+    <div class="chart-wrap">
+      <div class="chart-top">
+        <span style="font-size:13px;font-weight:500;">近6次体重记录</span>
+        <div class="chart-legend">
+          <span class="leg"><span class="leg-dot" style="background:var(--x-color)"></span>仙仙</span>
+          <span class="leg"><span class="leg-dot" style="background:var(--s-color)"></span>四月</span>
+        </div>
+      </div>
+      <canvas id="weightChart"></canvas>
+      <div class="weight-inputs" id="weightInputs"></div>
+    </div>
+  </div>
+  <!-- PAGE 2 -->
+  <div class="page" id="page-food">
+    <div class="section-title"><span>🥣</span> 饮食记录</div>
+    <div class="food-grid">
+      <div class="food-card">
+        <div class="food-card-title"><span class="dot dot-x"></span>仙仙</div>
+        <div class="food-row"><span class="label">主粮品牌</span><span class="val" contenteditable="true">纽顿全价猫粮</span></div>
+        <div class="food-row"><span class="label">干粮量/天</span><span class="val" contenteditable="true">40 g</span></div>
+        <div class="food-row"><span class="label">湿粮</span><span class="val" contenteditable="true">无</span></div>
+        <div class="food-row"><span class="label">喂食次数</span><span class="val" contenteditable="true">3 次/天</span></div>
+        <div class="food-row"><span class="label">零食</span><span class="val" contenteditable="true">冻干猫条</span></div>
+        <div class="food-row"><span class="label">零食频率</span><span class="val" contenteditable="true">每周2次</span></div>
+        <div class="food-row"><span class="label">饮水情况</span><span class="val" contenteditable="true">不爱喝水</span></div>
+        <div class="food-row"><span class="label">食欲状态</span><span class="badge good" onclick="toggleBadge(this)">良好</span></div>
+        <div class="food-row"><span class="label">备注</span><span class="val" contenteditable="true">控制体重中，不能多喂</span></div>
+      </div>
+      <div class="food-card">
+        <div class="food-card-title"><span class="dot dot-s"></span>四月</div>
+        <div class="food-row"><span class="label">主粮品牌</span><span class="val" contenteditable="true">纽顿全价猫粮</span></div>
+        <div class="food-row"><span class="label">干粮量/天</span><span class="val" contenteditable="true">40 g</span></div>
+        <div class="food-row"><span class="label">湿粮</span><span class="val" contenteditable="true">无</span></div>
+        <div class="food-row"><span class="label">喂食次数</span><span class="val" contenteditable="true">3 次/天</span></div>
+        <div class="food-row"><span class="label">零食</span><span class="val" contenteditable="true">冻干猫条</span></div>
+        <div class="food-row"><span class="label">零食频率</span><span class="val" contenteditable="true">每周2次</span></div>
+        <div class="food-row"><span class="label">饮水情况</span><span class="val" contenteditable="true">爱喝水，饮水充足</span></div>
+        <div class="food-row"><span class="label">食欲状态</span><span class="badge good" onclick="toggleBadge(this)">良好</span></div>
+        <div class="food-row"><span class="label">备注</span><span class="val" contenteditable="true">需定期监测肾功能</span></div>
+      </div>
+    </div>
+  </div>
+  <!-- PAGE 3 -->
+  <div class="page" id="page-gallery">
+    <div class="gallery-toolbar">
+      <div class="week-nav">
+        <button class="week-btn" onclick="changeWeek(-1)">◀</button>
+        <div class="week-label" id="weekLabel">本周</div>
+        <button class="week-btn" onclick="changeWeek(1)">▶</button>
+      </div>
+      <button class="upload-btn" onclick="triggerPhotoUpload()">＋ 上传照片 / 视频</button>
+      <input type="file" id="photoUploadInput" accept="image/*,video/*" multiple style="display:none" onchange="handlePhotoUpload(event)">
+    </div>
+    <div class="photo-grid" id="photoGrid"></div>
+    <p style="font-size:12px;color:var(--text-light);text-align:center;margin-top:8px;">点击空格上传 · 悬停图片右上角可删除</p>
+  </div>
+  <!-- PAGE 4 -->
+  <div class="page" id="page-diary">
+    <div class="diary-controls">
+      <div class="section-title" style="margin:0">📔 生活日记</div>
+      <button class="add-diary-btn" onclick="openDiaryModal()">＋ 添加日记</button>
+    </div>
+    <div class="diary-list" id="diaryList"></div>
+  </div>
+</main>
+<footer>🐾 用爱记录 · 仙仙 &amp; 四月 · 所有数据自动保存在本地</footer>
+<div class="modal-overlay" id="diaryModal">
+  <div class="modal">
+    <h3>添加日记</h3>
+    <div class="modal-field"><label class="modal-label">日期</label><input type="date" class="modal-input" id="diaryDate"></div>
+    <div class="modal-field"><label class="modal-label">关于谁</label>
+      <select class="modal-select" id="diaryCat">
+        <option value="both">仙仙 &amp; 四月</option>
+        <option value="x">仙仙</option>
+        <option value="s">四月</option>
+      </select>
+    </div>
+    <div class="modal-field"><label class="modal-label">日记内容</label><textarea class="modal-textarea" id="diaryText" placeholder="记录今天发生的趣事..."></textarea></div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeDiaryModal()">取消</button>
+      <button class="modal-confirm" onclick="saveDiary()">保存</button>
+    </div>
+  </div>
+</div>
+<div class="save-notice" id="saveNotice">✓ 已保存</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+let state = {
+  weightLabels:['第1次','第2次','第3次','第4次','第5次','第6次'],
+  weightX:[3.8,3.9,3.9,4.0,4.0,4.0],
+  weightS:[3.6,3.7,3.7,3.8,3.8,3.8],
+  photos:[],
+  diary:[
+    {id:1,date:'2026-05-10',cat:'both',text:'仙仙早上起来就开始捣乱，多动症发作。四月一如既往安静，吃完舔毛找猫窝睡觉。'}
+  ],
+  currentWeekOffset:0,
+  nextId:2
+};
+function saveState(){try{localStorage.setItem('catDiary2025',JSON.stringify(state));}catch(e){}showSaveNotice();}
+function loadState(){try{const s=localStorage.getItem('catDiary2025');if(s)state={...state,...JSON.parse(s)}}catch(e){}}
+function showSaveNotice(){const n=document.getElementById('saveNotice');n.classList.add('show');setTimeout(()=>n.classList.remove('show'),1800);}
+function showPage(name,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  btn.classList.add('active');
+  if(name==='gallery')renderGallery();
+  if(name==='diary')renderDiary();
+}
+function triggerAvatarUpload(cat){document.getElementById('upload-avatar-'+cat).click();}
+function handleAvatarUpload(e,cat){const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=ev=>{const av=document.getElementById('avatar-'+cat);av.innerHTML='<img src="'+ev.target.result+'" alt="头像">';saveState();};reader.readAsDataURL(file);}
+function toggleBadge(el){if(el.classList.contains('good')){el.classList.remove('good');el.classList.add('warn');}else{el.classList.remove('warn');el.classList.add('good');}saveState();}
+let chart;
+function buildWeightInputs(){
+  const wrap=document.getElementById('weightInputs');wrap.innerHTML='';
+  for(let i=0;i<6;i++){
+    const g=document.createElement('div');g.className='wi-group';
+    g.innerHTML=`<div class="wi-label">${state.weightLabels[i]||'第'+(i+1)+'次'}</div><div class="wi-pair"><div class="wi-mini-label" style="color:var(--x-color)">仙仙</div><input class="wi-input wi-x" type="number" step="0.1" min="0" max="20" value="${state.weightX[i]}" data-idx="${i}" data-cat="x"><div class="wi-mini-label" style="color:var(--s-color)">四月</div><input class="wi-input wi-s" type="number" step="0.1" min="0" max="20" value="${state.weightS[i]}" data-idx="${i}" data-cat="s"></div>`;
+    wrap.appendChild(g);
+  }
+  wrap.querySelectorAll('.wi-input').forEach(inp=>{inp.addEventListener('change',function(){const i=+this.dataset.idx,cat=this.dataset.cat;if(cat==='x')state.weightX[i]=+this.value;else state.weightS[i]=+this.value;updateChart();saveState();});});
+}
+function initChart(){
+  const ctx=document.getElementById('weightChart').getContext('2d');
+  chart=new Chart(ctx,{type:'line',data:{labels:state.weightLabels,datasets:[
+    {label:'仙仙',data:state.weightX,borderColor:'#b8926a',backgroundColor:'rgba(184,146,106,0.1)',tension:0.4,pointBackgroundColor:'#b8926a',pointRadius:5,borderWidth:2},
+    {label:'四月',data:state.weightS,borderColor:'#6a9ab8',backgroundColor:'rgba(106,154,184,0.1)',tension:0.4,pointBackgroundColor:'#6a9ab8',pointRadius:5,borderWidth:2}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.parsed.y+' kg'}}},scales:{y:{ticks:{callback:v=>v+'kg',font:{size:11}},grid:{color:'#f0ece4'},border:{display:false}},x:{ticks:{font:{size:11}},grid:{display:false},border:{display:false}}}}});
+}
+function updateChart(){chart.data.labels=state.weightLabels;chart.data.datasets[0].data=state.weightX;chart.data.datasets[1].data=state.weightS;chart.update();}
+function getWeekKey(offset){const d=new Date();d.setDate(d.getDate()+offset*7-d.getDay());const s=d.toISOString().slice(0,10);d.setDate(d.getDate()+6);return s+'_'+d.toISOString().slice(0,10);}
+function getWeekLabel(offset){if(offset===0)return'本周';if(offset===-1)return'上周';if(offset===1)return'下周';const d=new Date();d.setDate(d.getDate()+offset*7-d.getDay());return(d.getMonth()+1)+'月 第'+Math.ceil(d.getDate()/7)+'周';}
+function changeWeek(dir){state.currentWeekOffset+=dir;document.getElementById('weekLabel').textContent=getWeekLabel(state.currentWeekOffset);renderGallery();}
+function renderGallery(){
+  const week=getWeekKey(state.currentWeekOffset);
+  const photos=state.photos.filter(p=>p.week===week);
+  const grid=document.getElementById('photoGrid');grid.innerHTML='';
+  const total=Math.max(6,photos.length+1);
+  for(let i=0;i<total;i++){
+    const p=photos[i];const slot=document.createElement('div');slot.className='photo-slot'+(p?' filled':'');
+    if(p){
+      if(p.type==='video'){const vid=document.createElement('video');vid.src=p.url;vid.controls=true;vid.style.cssText='width:100%;height:100%;object-fit:cover;';slot.appendChild(vid);}
+      else{const img=document.createElement('img');img.src=p.url;img.alt=p.caption||'照片';slot.appendChild(img);}
+      const del=document.createElement('button');del.className='delete-photo';del.textContent='×';del.onclick=(e)=>{e.stopPropagation();deletePhoto(p.id);};slot.appendChild(del);
+    }else{slot.innerHTML='<div style="font-size:26px">📷</div><div style="font-size:11px;color:var(--text-light)">点击上传</div>';slot.onclick=()=>triggerPhotoUpload();}
+    grid.appendChild(slot);
+    if(p){const cap=document.createElement('div');cap.className='photo-caption';cap.contentEditable=true;cap.textContent=p.caption||'添加说明...';cap.addEventListener('blur',()=>{p.caption=cap.textContent;saveState();});grid.appendChild(cap);}else{grid.appendChild(document.createElement('div'));}
+  }
+}
+function triggerPhotoUpload(){document.getElementById('photoUploadInput').click();}
+function handlePhotoUpload(e){
+  const files=[...e.target.files];const week=getWeekKey(state.currentWeekOffset);let loaded=0;
+  files.forEach(file=>{const reader=new FileReader();reader.onload=ev=>{state.photos.push({id:Date.now()+Math.random(),week,url:ev.target.result,caption:'',type:file.type.startsWith('video')?'video':'image'});loaded++;if(loaded===files.length){renderGallery();saveState();}};reader.readAsDataURL(file);});
+  e.target.value='';
+}
+function deletePhoto(id){state.photos=state.photos.filter(p=>p.id!==id);renderGallery();saveState();}
+function renderDiary(){
+  const list=document.getElementById('diaryList');list.innerHTML='';
+  const sorted=[...state.diary].sort((a,b)=>b.date.localeCompare(a.date));
+  if(sorted.length===0){list.innerHTML='<p style="text-align:center;color:var(--text-light);padding:40px 0">还没有日记，点击右上角添加第一条～</p>';return;}
+  sorted.forEach(entry=>{
+    const d=new Date(entry.date+'T00:00:00');
+    const catMap={x:{text:'仙仙',cls:'x'},s:{text:'四月',cls:'s'},both:{text:'仙仙 & 四月',cls:'both'}};
+    const cat=catMap[entry.cat]||catMap.both;
+    const el=document.createElement('div');el.className='diary-entry';
+    el.innerHTML=`<div class="diary-date-box"><div class="diary-date-day">${d.getDate()}</div><div class="diary-date-month">${d.getMonth()+1}月</div></div><div class="diary-body"><div class="diary-tags"><span class="diary-tag ${cat.cls}">${cat.text}</span></div><div class="diary-text" contenteditable="true">${entry.text}</div></div><div><button class="diary-action-btn" title="删除" onclick="deleteDiary(${entry.id})">🗑</button></div>`;
+    el.querySelector('.diary-text').addEventListener('blur',function(){entry.text=this.textContent;saveState();});
+    list.appendChild(el);
+  });
+}
+function deleteDiary(id){state.diary=state.diary.filter(e=>e.id!==id);renderDiary();saveState();}
+function openDiaryModal(){document.getElementById('diaryDate').value=new Date().toISOString().slice(0,10);document.getElementById('diaryCat').value='both';document.getElementById('diaryText').value='';document.getElementById('diaryModal').classList.add('open');}
+function closeDiaryModal(){document.getElementById('diaryModal').classList.remove('open');}
+function saveDiary(){const date=document.getElementById('diaryDate').value;const cat=document.getElementById('diaryCat').value;const text=document.getElementById('diaryText').value.trim();if(!text)return;state.diary.push({id:state.nextId++,date,cat,text});closeDiaryModal();renderDiary();saveState();}
+document.addEventListener('blur',function(e){if(e.target.contentEditable==='true')saveState();},true);
+loadState();buildWeightInputs();initChart();
+document.getElementById('weekLabel').textContent=getWeekLabel(0);
+</script>
+</body>
+</html>
