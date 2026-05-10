@@ -6,6 +6,7 @@
 <title>🐾 仙仙 & 四月的生活日记</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+  /* ── 这里完全保留你原始页面的所有样式 ── */
   :root {
     --x-color: #b8926a; --x-light: #f7efe4; --x-mid: #e8d5bc;
     --s-color: #6a9ab8; --s-light: #e4f0f7; --s-mid: #bcd5e8;
@@ -18,7 +19,7 @@
     --shadow-hover: 0 4px 24px rgba(0,0,0,0.10);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: "Noto Sans SC", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6; padding-bottom: 60px; }
+  body { font-family: "Noto Sans SC", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6; }
   header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 28px 0 20px; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 12px rgba(0,0,0,0.04); }
   .header-paws { font-size: 22px; letter-spacing: 6px; margin-bottom: 4px; }
   header h1 { font-family: "Noto Serif SC", serif; font-size: 28px; font-weight: 700; letter-spacing: 0.04em; margin-bottom: 4px; }
@@ -30,306 +31,73 @@
   main { max-width: 860px; margin: 0 auto; padding: 32px 16px 60px; }
   .page { display: none; } .page.active { display: block; }
   .section-title { font-family: "Noto Serif SC", serif; font-size: 18px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
-  .cat-grid, .health-grid, .food-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 28px; }
-  .cat-card, .health-card, .food-card { background: var(--surface); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); position: relative; }
+  .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 28px; }
+  .cat-card { background: var(--surface); border-radius: var(--radius); padding: 24px 20px 20px; box-shadow: var(--shadow); border: 1px solid var(--border); transition: box-shadow 0.2s; }
+  .cat-card:hover { box-shadow: var(--shadow-hover); }
   .cat-card.xianxian { border-top: 4px solid var(--x-color); }
   .cat-card.siyue { border-top: 4px solid var(--s-color); }
   .cat-avatar-area { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
-  .cat-avatar { width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--border); overflow: hidden; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; }
+  .cat-avatar { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid var(--border); background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 34px; cursor: pointer; overflow: hidden; flex-shrink: 0; transition: border-color 0.2s; }
   .cat-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .cat-avatar-hint { font-size: 10px; color: var(--text-light); margin-top: 3px; text-align: center; }
   .cat-name-block .name { font-family: "Noto Serif SC", serif; font-size: 22px; font-weight: 600; }
+  .cat-name-block .breed { font-size: 12px; color: var(--text-muted); margin-top: 2px; font-weight: 300; }
   .cat-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
   .stat-item { background: var(--bg); border-radius: var(--radius-sm); padding: 10px 12px; }
   .stat-label { font-size: 11px; color: var(--text-muted); margin-bottom: 3px; }
-  .stat-value { font-size: 15px; font-weight: 500; outline: none; border-bottom: 1px dashed transparent; }
-  .stat-value[contenteditable="true"]:hover { border-bottom-color: var(--border); }
-  .health-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--bg); font-size: 13px; }
-  .badge { font-size: 11px; padding: 2px 10px; border-radius: 20px; font-weight: 500; cursor: pointer; }
+  .stat-value { font-size: 15px; font-weight: 500; }
+  .stat-value[contenteditable="true"] { outline: none; border-bottom: 1px dashed var(--border); min-width: 40px; display: inline-block; cursor: text; }
+  .stat-value[contenteditable="true"]:focus { border-bottom-color: var(--text-muted); }
+  .edit-hint { font-size: 11px; color: var(--text-light); text-align: center; padding-top: 8px; border-top: 1px solid var(--border); }
+  .health-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 28px; }
+  .health-card { background: var(--surface); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+  .health-card-title { font-size: 14px; font-weight: 500; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+  .dot-x { background: var(--x-color); } .dot-s { background: var(--s-color); }
+  .health-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--bg); font-size: 13px; gap: 8px; }
+  .health-row:last-child { border-bottom: none; }
+  .health-row .label { color: var(--text-muted); flex-shrink: 0; }
+  .health-row .val[contenteditable="true"] { outline: none; text-align: right; border-bottom: 1px dashed transparent; cursor: text; min-width: 60px; font-weight: 500; }
+  .health-row .val[contenteditable="true"]:hover { border-bottom-color: var(--border); }
+  .health-row .val[contenteditable="true"]:focus { border-bottom-color: var(--text-muted); }
+  .badge { font-size: 11px; padding: 2px 10px; border-radius: 20px; font-weight: 500; cursor: pointer; user-select: none; white-space: nowrap; }
   .badge.good { background: var(--accent-green-bg); color: var(--accent-green); }
   .badge.warn { background: var(--accent-amber-bg); color: var(--accent-amber); }
   .chart-wrap { background: var(--surface); border-radius: var(--radius); padding: 22px 24px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 28px; }
-  .weight-inputs { display: grid; grid-template-columns: repeat(6,1fr); gap: 6px; margin-top: 16px; border-top: 1px solid var(--border); padding-top: 10px; }
-  .wi-input { width: 100%; padding: 4px; font-size: 12px; border: 1px solid var(--border); border-radius: 6px; text-align: center; }
-  .photo-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
-  .photo-slot { aspect-ratio: 1; border-radius: 8px; overflow: hidden; background: var(--bg); border: 1.5px dashed var(--border); cursor: pointer; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-  .photo-slot img { width: 100%; height: 100%; object-fit: cover; }
-  .delete-photo { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; display: none; }
-  .photo-slot.filled:hover .delete-photo { display: block; }
-  .diary-entry { background: var(--surface); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 12px; display: flex; gap: 16px; border: 1px solid var(--border); }
-  .diary-date-box { min-width: 50px; text-align: center; background: var(--bg); padding: 8px; border-radius: 8px; }
-  .diary-tag { font-size: 11px; padding: 2px 10px; border-radius: 20px; }
-  .diary-tag.x { background: var(--x-light); color: var(--x-color); }
-  .diary-tag.s { background: var(--s-light); color: var(--s-color); }
-  .diary-tag.both { background: #f0ece4; color: #8a6a40; }
-  
-  /* 管理同步工具条 */
-  .sync-admin-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #2c2824; color: white; padding: 12px; display: flex; justify-content: center; align-items: center; gap: 20px; z-index: 9999; font-size: 13px; }
-  .sync-btn { background: #5a8a4a; color: white; border: none; padding: 6px 15px; border-radius: 20px; cursor: pointer; font-weight: 500; transition: background 0.2s; }
-  .sync-btn:hover { background: #4a7a3a; }
-  .copy-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center; padding: 20px; }
-  .copy-modal-box { background: white; padding: 25px; border-radius: 14px; max-width: 400px; text-align: center; }
-  @media (max-width: 600px) { .cat-grid, .health-grid, .food-grid { grid-template-columns: 1fr; } .sync-admin-bar { flex-direction: column; gap: 8px; } }
-</style>
-</head>
-<body>
-
-<header>
-  <div class="header-paws">🐾 🐾 🐾</div>
-  <h1>仙仙 &amp; 四月的生活日记</h1>
-  <p>更新完毕后，点击底部的“导出代码”同步到 GitHub ✦</p>
-  <nav class="nav-tabs">
-    <button class="nav-tab active" onclick="showPage('profile',this)">档案 &amp; 健康</button>
-    <button class="nav-tab" onclick="showPage('food',this)">饮食记录</button>
-    <button class="nav-tab" onclick="showPage('gallery',this)">相册</button>
-    <button class="nav-tab" onclick="showPage('diary',this)">生活日记</button>
-  </nav>
-</header>
-
-<main id="main-content">
-  </main>
-
-<div class="sync-admin-bar">
-  <span>💡 在这里修改的内容仅存在你的浏览器中</span>
-  <button class="sync-btn" onclick="exportData()">完成修改：点击导出新代码</button>
-</div>
-
-<div class="copy-modal" id="copyModal">
-  <div class="copy-modal-box">
-    <h3 style="margin-bottom:15px; color:#2c2824">✅ 代码已复制！</h3>
-    <p style="font-size:14px; color:#8a8078; margin-bottom:20px; line-height:1.5">
-      请前往 GitHub 打开你的 index.html 文件，<br>全选粘贴（替换全部内容）并保存。<br>稍等片刻，朋友们就能看到最新内容啦。
-    </p>
-    <button class="sync-btn" onclick="document.getElementById('copyModal').style.display='none'">我知道了</button>
-  </div>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script>
-// --- 这里是你的“核心数据库”，每次导出都会自动更新这里 ---
-const INITIAL_STATE = {
-  xianxian: {
-    weight: '4 kg', age: '2.5 岁', status: '已绝育', health: '良好 ✓', 
-    note: '暹罗花纹，蓝眼睛，爱撒娇，需要减肥',
-    checkup: '2025.04.12', teeth: '轻微牙垢', hair: '柔顺有光泽', water: '不爱喝水，需鼓励', food: '纽顿全价猫粮', foodAmount: '40 g', mealFreq: '3 次/天', snacks: '冻干猫条', snackFreq: '每周2次'
-  },
-  siyue: {
-    weight: '3.8 kg', age: '2.5 岁', status: '已绝育', health: '良好 ✓', 
-    note: '蓝白双色，天生缺失右肾右卵巢，爱喝水',
-    checkup: '2025.05.26', teeth: '轻微牙垢', hair: '浓密蓬松', water: '爱喝水，饮水充足', food: '纽顿全价猫粮', foodAmount: '40 g', mealFreq: '3 次/天', snacks: '冻干猫条', snackFreq: '每周2次'
-  },
-  weightLabels: ['第1次','第2次','第3次','第4次','第5次','第6次'],
-  weightX: [3.8, 3.9, 3.9, 4.0, 4.0, 4.0],
-  weightS: [3.6, 3.7, 3.7, 3.8, 3.8, 3.8],
-  photos: [], 
-  diary: [
-    {id: 1, date: '2026-05-10', cat: 'both', text: '仙仙早上起来就开始捣乱，多动症发作。四月一如既往安静，吃完舔毛找猫窝睡觉。'}
-  ],
-  nextId: 2
-};
-
-// 加载状态：优先从代码读取，如果本地有修改则合并
-let state = JSON.parse(localStorage.getItem('cat_diary_db')) || INITIAL_STATE;
-
-function showPage(name, btn) {
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-  renderPage(name);
-}
-
-function renderPage(name) {
-  const main = document.getElementById('main-content');
-  if (name === 'profile') {
-    main.innerHTML = `
-      <div class="section-title"><span>🐱</span> 猫咪档案</div>
-      <div class="cat-grid">
-        ${renderCatCard('x', '仙仙', state.xianxian)}
-        ${renderCatCard('s', '四月', state.siyue)}
-      </div>
-      <div class="section-title"><span>🩺</span> 健康状况</div>
-      <div class="health-grid">
-        ${renderHealthCard('x', '仙仙', state.xianxian)}
-        ${renderHealthCard('s', '四月', state.siyue)}
-      </div>
-      <div class="section-title"><span>📊</span> 体重趋势</div>
-      <div class="chart-wrap">
-        <canvas id="weightChart" style="height:200px"></canvas>
-        <div class="weight-inputs" id="weightInputs"></div>
-      </div>
-    `;
-    initChart();
-    renderWeightInputs();
-  } else if (name === 'food') {
-    main.innerHTML = `
-      <div class="section-title"><span>🥣</span> 饮食记录</div>
-      <div class="food-grid">
-        ${renderFoodCard('x', '仙仙', state.xianxian)}
-        ${renderFoodCard('s', '四月', state.siyue)}
-      </div>
-    `;
-  } else if (name === 'gallery') {
-    main.innerHTML = `
-      <div class="section-title"><span>📷</span> 生活相册</div>
-      <div class="photo-grid" id="photoGrid"></div>
-      <input type="file" id="photoInp" hidden accept="image/*" multiple onchange="handleUpload(event)">
-    `;
-    renderGallery();
-  } else if (name === 'diary') {
-    main.innerHTML = `
-      <div class="diary-controls"><div class="section-title"><span>📔</span> 生活日记</div>
-      <button class="sync-btn" style="margin-bottom:15px" onclick="addDiary()">＋ 添加日记</button></div>
-      <div id="diaryList"></div>
-    `;
-    renderDiary();
-  }
-}
-
-function renderCatCard(id, name, data) {
-  return `
-    <div class="cat-card ${id==='x'?'xianxian':'siyue'}">
-      <div class="cat-avatar-area">
-        <div class="cat-avatar">🐱</div>
-        <div class="cat-name-block"><div class="name">${name}</div></div>
-      </div>
-      <div class="cat-stats">
-        <div class="stat-item"><div class="stat-label">体重</div><div class="stat-value" contenteditable="true" onblur="updateState('${id}','weight',this.innerText)">${data.weight}</div></div>
-        <div class="stat-item"><div class="stat-label">年龄</div><div class="stat-value" contenteditable="true" onblur="updateState('${id}','age',this.innerText)">${data.age}</div></div>
-        <div class="stat-item" style="grid-column:span 2"><div class="stat-label">备注</div><div class="stat-value" contenteditable="true" onblur="updateState('${id}','note',this.innerText)">${data.note}</div></div>
-      </div>
-    </div>
-  `;
-}
-
-function renderHealthCard(id, name, data) {
-  return `
-    <div class="health-card">
-      <div style="font-weight:600; margin-bottom:10px">${name}</div>
-      <div class="health-row"><span>体检日期</span><span contenteditable="true" onblur="updateState('${id}','checkup',this.innerText)">${data.checkup}</span></div>
-      <div class="health-row"><span>牙齿状况</span><span contenteditable="true" onblur="updateState('${id}','teeth',this.innerText)">${data.teeth}</span></div>
-      <div class="health-row"><span>毛发状况</span><span contenteditable="true" onblur="updateState('${id}','hair',this.innerText)">${data.hair}</span></div>
-    </div>
-  `;
-}
-
-function renderFoodCard(id, name, data) {
-  return `
-    <div class="food-card">
-      <div style="font-weight:600; margin-bottom:10px">${name}</div>
-      <div class="health-row"><span>主粮</span><span contenteditable="true" onblur="updateState('${id}','food',this.innerText)">${data.food}</span></div>
-      <div class="health-row"><span>日食量</span><span contenteditable="true" onblur="updateState('${id}','foodAmount',this.innerText)">${data.foodAmount}</span></div>
-      <div class="health-row"><span>零食</span><span contenteditable="true" onblur="updateState('${id}','snacks',this.innerText)">${data.snacks}</span></div>
-    </div>
-  `;
-}
-
-function updateState(cat, key, val) {
-  if(cat === 'x') state.xianxian[key] = val;
-  else if(cat === 's') state.siyue[key] = val;
-  localStorage.setItem('cat_diary_db', JSON.stringify(state));
-}
-
-let chart;
-function initChart() {
-  const ctx = document.getElementById('weightChart').getContext('2d');
-  chart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: state.weightLabels,
-      datasets: [
-        { label: '仙仙', data: state.weightX, borderColor: '#b8926a', tension: 0.3 },
-        { label: '四月', data: state.weightS, borderColor: '#6a9ab8', tension: 0.3 }
-      ]
-    },
-    options: { responsive: true, maintainAspectRatio: false }
-  });
-}
-
-function renderWeightInputs() {
-  const wrap = document.getElementById('weightInputs');
-  wrap.innerHTML = state.weightX.map((v, i) => `
-    <div>
-      <input class="wi-input" type="number" value="${v}" onchange="updateWeight('x',${i},this.value)">
-      <input class="wi-input" type="number" value="${state.weightS[i]}" onchange="updateWeight('s',${i},this.value)">
-    </div>
-  `).join('');
-}
-
-function updateWeight(cat, i, val) {
-  if(cat === 'x') state.weightX[i] = parseFloat(val);
-  else state.weightS[i] = parseFloat(val);
-  chart.update();
-  localStorage.setItem('cat_diary_db', JSON.stringify(state));
-}
-
-function renderGallery() {
-  const grid = document.getElementById('photoGrid');
-  grid.innerHTML = state.photos.map((p, i) => `
-    <div class="photo-slot filled">
-      <img src="${p}">
-      <button class="delete-photo" onclick="deletePhoto(${i})">×</button>
-    </div>
-  `).join('') + `<div class="photo-slot" onclick="document.getElementById('photoInp').click()">＋</div>`;
-}
-
-function handleUpload(e) {
-  const files = Array.from(e.target.files);
-  files.forEach(file => {
-    const reader = new FileReader();
-    reader.onload = ev => {
-      state.photos.push(ev.target.result);
-      renderGallery();
-      localStorage.setItem('cat_diary_db', JSON.stringify(state));
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
-function deletePhoto(i) {
-  state.photos.splice(i, 1);
-  renderGallery();
-  localStorage.setItem('cat_diary_db', JSON.stringify(state));
-}
-
-function renderDiary() {
-  const list = document.getElementById('diaryList');
-  list.innerHTML = state.diary.sort((a,b)=>b.date.localeCompare(a.date)).map(d => `
-    <div class="diary-entry">
-      <div class="diary-date-box">${d.date.split('-')[2]}<br><small>${d.date.split('-')[1]}月</small></div>
-      <div style="flex:1">
-        <div style="margin-bottom:5px"><span class="diary-tag both">记录</span></div>
-        <div contenteditable="true" onblur="editDiary(${d.id}, this.innerText)">${d.text}</div>
-      </div>
-    </div>
-  `).join('');
-}
-
-function addDiary() {
-  const text = prompt("记录今天的趣事：");
-  if(text) {
-    state.diary.push({ id: Date.now(), date: new Date().toISOString().slice(0,10), text: text });
-    renderDiary();
-    localStorage.setItem('cat_diary_db', JSON.stringify(state));
-  }
-}
-
-function editDiary(id, text) {
-  const item = state.diary.find(d => d.id === id);
-  if(item) item.text = text;
-  localStorage.setItem('cat_diary_db', JSON.stringify(state));
-}
-
-// 核心同步函数
-function exportData() {
-  const currentHTML = document.documentElement.outerHTML;
-  const stateStr = `const INITIAL_STATE = ${JSON.stringify(state, null, 2)};`;
-  const finalHTML = currentHTML.replace(/const INITIAL_STATE = \{[\s\S]*?\};/, stateStr);
-  
-  navigator.clipboard.writeText(finalHTML).then(() => {
-    document.getElementById('copyModal').style.display = 'flex';
-  });
-}
-
-// 启动
-renderPage('profile');
-</script>
-</body>
-</html>
+  .chart-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .chart-legend { display: flex; gap: 16px; font-size: 12px; color: var(--text-muted); }
+  .leg { display: flex; align-items: center; gap: 6px; }
+  .leg-dot { width: 10px; height: 10px; border-radius: 50%; }
+  canvas#weightChart { width: 100% !important; height: 180px !important; }
+  .weight-inputs { display: grid; grid-template-columns: repeat(6,1fr); gap: 6px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .wi-group { text-align: center; }
+  .wi-label { font-size: 10px; color: var(--text-muted); margin-bottom: 4px; }
+  .wi-pair { display: flex; flex-direction: column; gap: 3px; }
+  .wi-input { width: 100%; padding: 4px 6px; font-size: 12px; border: 1px solid var(--border); border-radius: 6px; text-align: center; font-family: inherit; color: var(--text); background: var(--bg); }
+  .wi-input:focus { outline: none; border-color: var(--text-muted); }
+  .wi-x { border-left: 2px solid var(--x-color); } .wi-s { border-left: 2px solid var(--s-color); }
+  .wi-mini-label { font-size: 9px; color: var(--text-light); }
+  .food-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 28px; }
+  .food-card { background: var(--surface); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+  .food-card-title { font-size: 14px; font-weight: 500; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .food-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--bg); font-size: 13px; gap: 8px; }
+  .food-row:last-child { border-bottom: none; }
+  .food-row .label { color: var(--text-muted); flex-shrink: 0; }
+  .food-row .val[contenteditable="true"] { outline: none; text-align: right; border-bottom: 1px dashed transparent; cursor: text; min-width: 60px; font-weight: 500; }
+  .food-row .val[contenteditable="true"]:hover { border-bottom-color: var(--border); }
+  .food-row .val[contenteditable="true"]:focus { border-bottom-color: var(--text-muted); }
+  .gallery-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+  .week-nav { display: flex; align-items: center; gap: 10px; }
+  .week-btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 20px; background: var(--surface); cursor: pointer; font-size: 13px; font-family: inherit; color: var(--text); transition: all 0.15s; }
+  .week-btn:hover { background: var(--bg); }
+  .week-label { font-size: 14px; font-weight: 500; min-width: 120px; text-align: center; }
+  .upload-btn { padding: 8px 18px; background: var(--text); color: #fff; border: none; border-radius: 20px; font-size: 13px; cursor: pointer; font-family: inherit; font-weight: 500; transition: opacity 0.2s; display: flex; align-items: center; gap: 6px; }
+  .upload-btn:hover { opacity: 0.8; }
+  .photo-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 14px; }
+  .photo-slot { aspect-ratio: 1; border-radius: var(--radius-sm); overflow: hidden; background: var(--bg); border: 1.5px dashed var(--border); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-size: 12px; color: var(--text-light); transition: all 0.2s; position: relative; }
+  .photo-slot:hover { border-color: var(--text-muted); background: var(--surface); }
+  .photo-slot.filled { border-style: solid; border-color: var(--border); }
+  .photo-slot img, .photo-slot video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .photo-slot .delete-photo { position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; background: rgba(0,0,0,0.5); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; opacity: 0; transition: opacity 0.15s; border: none; line-height: 1; }
+  .photo-slot.filled:hover .delete-photo { opacity: 1; }
+  .photo-caption { font-size: 11px; color: var(--text-light); text-align: center; padding: 4px 8px 0; outline: none; border-bottom
